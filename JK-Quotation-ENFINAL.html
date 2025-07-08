@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quotation Generator</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+    }
+    .ltr { direction: ltr; text-align: left; }
+    .rtl { direction: rtl; text-align: right; }
+    .background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.letterhead {
+  width: 744px;
+  height: 1052px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  padding: 0;
+  position: relative;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+      font-weight: bold;
+    }
+    
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border: 3px double #000; /* outer border */
+}
+
+table th, table td {
+  border: 1px solid #444; /* internal cell borders */
+  padding: 6px 8px;
+  text-align: center;
+}
+
+
+  table th {
+font-weight: bold;
+  }
+
+  hr {
+    border-top: 2px dashed #aaa;
+    margin: 40px 0;
+  }
+</style>
+
+
+<style>
+  body {
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-size: 16px;
+    margin: 10px 0 5px;
+  }
+
+  label {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    margin-top: 12px;
+  }
+
+  textarea, input[type="text"], input[type="number"], select {
+    width: 100%;
+    font-size: 14px;
+    padding: 6px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 8px 14px;
+    margin: 4px 2px;
+    border: 1px solid #ccc;
+    background-color: #e9f0ff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #d0e3ff;
+  }
+
+  .control-group {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+
+  .control-group label {
+    margin-bottom: 5px;
+  }
+
+  .checkbox-group {
+    margin-top: 10px;
+  }
+
+  .checkbox-group label {
+    margin-right: 10px;
+  }
+
+  .move-buttons button {
+    font-size: 16px;
+    padding: 10px;
+    margin: 2px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    color: #444;
+  }
+</style>
+
+    <h2 id="title">Quotation / JUSOOR KAF Contracting Est.</h2>
+
+  <div id="formFields">
+    
+
+<div style="margin-bottom: 15px;">
+  <label><strong>Client Info:</strong><br />
+    <textarea id="customerDetails" rows="5" style="width: 100%;">Company Name:
+Contact Person:
+Position:
+Quotation Date:
+Mobile Number:
+Email:</textarea>
+  </label>
+</div>
+
+
+    <label id="labelIntro">Introduction: <textarea id="introText" rows="6" cols="60">Thank you for considering our services. We are pleased to present the following quotation based on your requirements. We hope this marks the beginning of a fruitful and long-term partnership.</textarea></label>
+    <label id="labelSignature">Hand Signature: <input type="file" id="logoInput" accept="image/*" /></label>
+    <label id="labelBG">Upload Background: <input type="file" id="bgInput" accept="image/*" /></label>
+    <label id="labelStamp">Upload Stamp: <input type="file" id="stampInput" accept="image/*" /></label>
+  </div>
+
+  <div>
+    <strong>🔲 Show/Hide Columns:</strong>
+    <label class="column-toggle"><input type="checkbox" class="col-toggle" data-col="unit" checked> Unit</label>
+    <label class="column-toggle"><input type="checkbox" class="col-toggle" data-col="price" checked> Unit Price</label>
+    <label class="column-toggle"><input type="checkbox" class="col-toggle" data-col="vat" checked> VAT</label>
+    <label class="column-toggle"><input type="checkbox" class="col-toggle" data-col="discount" checked> Discount</label>
+  </div>
+
+  
+
+
+
+
+
+
+
+</div>
+<div class="settings-section">
+<h2 class="section-title">Settings</h2>
+<div id="signatureControlPanel" style="margin: 20px 0;">
+  <strong>Adjust Signature Position:</strong><br/>
+  <button onclick="moveSignature(15, 0)">⬅️</button>
+  <button onclick="moveSignature(-15, 0)">➡️</button>
+  <button onclick="moveSignature(0, 15)">⬆️</button>
+  <button onclick="moveSignature(0, -15)">⬇️</button>
+  <div style="margin-top: 10px; font-size: 12px;">
+    Right Offset: <span id="sigRightValue">0</span>px |
+    Bottom Offset: <span id="sigBottomValue">0</span>px
+  </div>
+</div>
+
+<div id="stampControlPanel" style="margin: 20px 0;">
+  <strong>Adjust Stamp Position:</strong><br/>
+  <button onclick="moveStamp(15, 0)">⬅️</button>
+  <button onclick="moveStamp(-15, 0)">➡️</button>
+  <button onclick="moveStamp(0, 15)">⬆️</button>
+  <button onclick="moveStamp(0, -15)">⬇️</button>
+  <div style="margin-top: 10px; font-size: 12px;">
+    Right Offset: <span id="rightValue">60</span>px |
+    Bottom Offset: <span id="bottomValue">60</span>px
+  </div>
+</div>
+
+<div class="buttons">
+    <button onclick="addRow()">➕ Add Row</button>
+    <button onclick="removeRow()">➖ Remove Row</button>
+  </div>
+
+  <table id="itemsTable">
+    <thead>
+      <tr>
+        <th>Description</th><th class="col-unit">Quantity</th><th class="col-price">Unit Price</th><th class="col-vat">VAT</th><th class="col-discount">Discount</th><th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="itemBody">
+      <tr>
+        <td><input class="desc" /></td>
+        <td class="col-unit"><input type="number" class="qty" /></td>
+        <td class="col-price"><input type="number" class="price" /></td>
+        <td class="col-vat"><input type="number" class="vat" /></td>
+        <td class="col-discount"><input type="number" class="disc" /></td>
+        <td class="total">0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Total الكلي: <span id="grandTotal">0</span></h4>
+  <label id="labelTerms">Terms: <textarea id="termsText" rows="6" cols="60">1. All quoted prices include a 15% Value Added Tax (VAT) as per current regulations.
+2. This quotation is valid for a period of 30 calendar days from the date of issue. After this period, prices and availability may be subject to change.
+3. The scope of work shall commence upon formal approval and signing of the contract, with execution timelines to be mutually agreed upon.
+4. Payment terms must be adhered to as outlined in the contractual agreement. Delayed payments may result in project delays or additional charges.
+5. This quotation is prepared based on the specifications provided. Any changes to the scope, materials, or quantities may result in a revised quotation.
+6. We reserve the right to amend the offer in case of unforeseen circumstances, changes in tax rates, or market fluctuations.
+7. Please contact our team should you have any questions, require clarifications, or wish to proceed with formal acceptance.</textarea></label>
+
+  
+<div style="margin-top: 20px;">
+  <h3>Margin Settings (in pixels)</h3>
+  <label>Top/Bottom Margin: <input type="number" id="tbMargin" value="120" style="width: 80px;" /> px</label>
+  <label>Left/Right Margin: <input type="number" id="lrMargin" value="50" style="width: 80px;" /> px</label>
+  <button onclick="applyNewMargins()">Apply Margins</button>
+</div>
+
+
+<div style="margin-top: 20px;">
+  <label>Document Title: <input type="text" id="docTitle" value="QUOTATION" style="width: 200px;" /></label>
+</div>
+
+
+<div style="margin-top: 15px; border: 1px solid #ccc; padding: 10px;">
+  <strong>الFont Size Settings:</strong><br/><br/>
+  <label>Document Title: <input type="number" id="docTitleFont" value="22" style="width: 60px;" /> نقطة</label><br/>
+  <label>Client Info: <input type="number" id="customerFont" value="12" style="width: 60px;" /> نقطة</label><br/>
+  <label>الIntroduction: <input type="number" id="introFont" value="16" style="width: 60px;" /> نقطة</label><br/>
+  <label>Terms: <input type="number" id="termsFont" value="16" style="width: 60px;" /> نقطة</label><br/>
+</div>
+
+<div class="buttons">
+    <button onclick="generatePreview()">Preview</button>
+    <button onclick="downloadAsPDF()">Download as PDF</button>
+    <button onclick="downloadAsImage()">📸 Download as Image</button>
+  </div>
+
+  <hr />
+  </div>
+</div>
+<div class="preview-container">
+<div class="letterhead ltr" id="letterhead">
+  
+  <div id="contentWrapper" style="width:100%; height:100%; display:flex; justify-content:center; align-items:flex-start;">
+    <div id="contentInner" style="width:100%; transform-origin: top center; transition: all 0.2s;">
+      <div id="previewTitle" style="font-size: 22pt; font-weight: bold; text-align: center; text-decoration: underline; margin-bottom: 20px;"></div>
+  <div id="contentInnerWrapper" style="width:100%; height:100%; position: relative;">
+    <div class="company-info">
+      
+      <h2 id="previewCompany">Company Name</h2>
+      <p id="previewContact">Contact Info</p>
+      <p id="previewClient"></p>
+      <p id="previewProject"></p>
+      <p id="previewNumber"></p>
+      <p id="previewDate"></p>
+      <p id="previewLocation"></p>
+      <p id="previewIntro"></p>
+    </div>
+    <div class="content">
+      <table id="previewTable"></table>
+      
+      <p id="previewTerms"></p>
+    
+      <img id="logoPreview" style="position:absolute; right:120px; bottom:300px; max-height:80px; transform: scale(2.2); transform-origin: center; z-index:10; mix-blend-mode:darken;">
+      <img id="stampPreview" style="position:absolute; right:60px; bottom:60px; max-width:120px; transform: scale(2); transform-origin: center; z-index:10; mix-blend-mode:darken;">
+</div>
+    </div>
+        </div>
+  </div>
+  
+  
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    
+
+    : <input type="text" id="companyName" />`;
+      document.getElementById("labelContact").innerHTML = `${t.contact}: <input type="text" id="contactInfo" />`;
+      document.getElementById("labelClient").innerHTML = `${t.client}: <input type="text" id="clientName" />`;
+      document.getElementById("labelProject").innerHTML = `${t.project}: <input type="text" id="projectName" />`;
+      document.getElementById("labelQuoteNum").innerHTML = `${t.quoteNum}: <input type="text" id="quotationNumber" />`;
+      document.getElementById("labelDate").innerHTML = `${t.date}: <input type="text" id="date" />`;
+      document.getElementById("labelLocation").innerHTML = `${t.location}: <input type="text" id="location" />`;
+      document.getElementById("labelIntro").innerHTML = `${t.intro}: <textarea id="introText" rows="6" cols="60">Thank you for considering our services. We are pleased to present the following quotation based on your requirements. We hope this marks the beginning of a fruitful and long-term partnership.</textarea>`;
+      document.getElementById("labelSignature").innerHTML = `${t.signature}: <input type="file" id="logoInput" accept="image/*" />`;
+      document.getElementById("labelBG").innerHTML = `${t.bg}: <input type="file" id="bgInput" accept="image/*" />`;
+      document.getElementById("labelStamp").innerHTML = `${t.stamp}: <input type="file" id="stampInput" accept="image/*" />`;
+      document.getElementById("labelTerms").innerHTML = `${t.terms}: <textarea id="termsText" rows="6" cols="60">1. All quoted prices include a 15% Value Added Tax (VAT) as per current regulations.
+2. This quotation is valid for a period of 30 calendar days from the date of issue. After this period, prices and availability may be subject to change.
+3. The scope of work shall commence upon formal approval and signing of the contract, with execution timelines to be mutually agreed upon.
+4. Payment terms must be adhered to as outlined in the contractual agreement. Delayed payments may result in project delays or additional charges.
+5. This quotation is prepared based on the specifications provided. Any changes to the scope, materials, or quantities may result in a revised quotation.
+6. We reserve the right to amend the offer in case of unforeseen circumstances, changes in tax rates, or market fluctuations.
+7. Please contact our team should you have any questions, require clarifications, or wish to proceed with formal acceptance.</textarea>`;
+    }
+
+    document.querySelectorAll('.col-toggle').forEach(chk => {
+      chk.addEventListener('change', e => {
+        const col = e.target.dataset.col;
+        document.querySelectorAll(`.col-${col}`).forEach(cell => {
+          cell.style.display = e.target.checked ? '' : 'none';
+        });
+      });
+    });
+
+    
+
+    
+
+    </td>`;
+        if (document.querySelector('.col-toggle[data-col="unit"]').checked) html += `<td>${qty}</td>`;
+        if (document.querySelector('.col-toggle[data-col="price"]').checked) html += `<td>${price}</td>`;
+        if (document.querySelector('.col-toggle[data-col="vat"]').checked) html += `<td>${vat}</td>`;
+        if (document.querySelector('.col-toggle[data-col="discount"]').checked) html += `<td>${disc}</td>`;
+        html += `<td>${lineTotal.toFixed(2)}</td></tr>`;
+      });
+
+      document.getElementById("previewTable").innerHTML = html;
+      document.getElementById("grandTotal").innerText = total.toFixed(2);
+      
+      
+  const getSize = (id, fallback) => parseInt(document.getElementById(id)?.value || fallback);
+  document.getElementById("previewTitle").style.fontSize = getSize("docTitleFont", 22) + "pt";
+  document.getElementById("previewCompany").style.fontSize = getSize("customerFont", 12) + "pt";
+  document.getElementById("previewIntro").style.fontSize = getSize("introFont", 16) + "pt";
+  document.getElementById("previewTerms").style.fontSize = getSize("termsFont", 16) + "pt";
+
+  document.getElementById("previewTerms").innerText = get("termsText");
+    }
+
+    document.getElementById("logoInput").addEventListener("change", e => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+    const logo = document.getElementById("logoPreview");
+    logo.src = reader.result;
+    logo.style.transform = "scale(2.2)";
+    logo.style.transformOrigin = "center";
+
+  // Apply Margins والPreview تلقائيًا عند التحميل
+  applyNewMargins();
+  generatePreview();
+
+  };
+      reader.readAsDataURL(file);
+    });
+
+    let highResBg = null;
+
+    document.getElementById("bgInput").addEventListener("change", e => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          // Store original for PDF
+          highResBg = reader.result;
+
+          // Create scaled image for preview
+          const canvas = document.createElement("canvas");
+          canvas.width = 794;
+          canvas.height = 1123;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const lowResPreview = canvas.toDataURL();
+          document.getElementById("letterhead").style.backgroundImage = `url(${lowResPreview})`;
+          document.getElementById("letterhead").style.width = canvas.width + "px";
+          document.getElementById("letterhead").style.height = canvas.height + "px";
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("stampInput").addEventListener("change", e => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      
+    reader.onload = () => {
+      const stamp = document.getElementById("stampPreview");
+      stamp.src = reader.result;
+      stamp.style.transform = "scale(2)";
+      stamp.style.transformOrigin = "center";
+    };
+    
+      reader.readAsDataURL(file);
+    });
+
+     = window.jspdf;
+      const letter = document.getElementById("letterhead");
+      const canvas = await html2canvas(letter, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+      pdf.addImage(imgData, "PNG", 0, 0, 595.28, 841.89);
+      pdf.save("quotation.pdf");
+    }
+  
+    
+    }
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  
+  }
+  window.applyNewMargins = applyNewMargins;
+
+  );
+    document.getElementById("grandTotal").innerText = total.toFixed(2);
+  }
+
+  document.getElementById("itemBody").addEventListener("input", updateTotals);
+
+  window.addRow = () => {
+    const row = document.createElement("tr");
+    row.innerHTML = '<td><input class="desc" /></td>' +
+                    '<td class="col-unit"><input type="number" class="qty" /></td>' +
+                    '<td class="col-price"><input type="number" class="price" /></td>' +
+                    '<td class="col-vat"><input type="number" class="vat" /></td>' +
+                    '<td class="col-discount"><input type="number" class="disc" /></td>' +
+                    '<td class="total">0</td>';
+    document.getElementById("itemBody").appendChild(row);
+  };
+
+  window.removeRow = () => {
+    const table = document.getElementById("itemBody");
+    if (table.rows.length > 1) table.deleteRow(-1);
+  };
+
+  window.generatePreview = () => {
+    const get = id => document.getElementById(id)?.value || '';
+    document.getElementById("previewTitle").innerText = get("docTitle");
+  document.getElementById("previewCompany").innerText = get("customerDetails");
+    document.getElementById("previewContact").innerText = get("contactInfo");
+    document.getElementById("previewClient").innerText = get("clientName");
+    document.getElementById("previewProject").innerText = get("projectName");
+    document.getElementById("previewNumber").innerText = get("quotationNumber");
+    document.getElementById("previewDate").innerText = get("date");
+    document.getElementById("previewLocation").innerText = get("location");
+    document.getElementById("previewIntro").innerText = get("introText");
+
+    let total = 0;
+    const rows = document.querySelectorAll("#itemBody tr");
+    let html = "<tr><th>Description</th>";
+    if (document.querySelector('.col-toggle[data-col="unit"]').checked) html += "<th>Quantity</th>";
+    if (document.querySelector('.col-toggle[data-col="price"]').checked) html += "<th>Unit Price</th>";
+    if (document.querySelector('.col-toggle[data-col="vat"]').checked) html += "<th>VAT</th>";
+    if (document.querySelector('.col-toggle[data-col="discount"]').checked) html += "<th>Discount</th>";
+    html += "<th>Total</th></tr>";
+
+    rows.forEach(row => {
+      const desc = row.querySelector(".desc").value;
+      const qty = parseFloat(row.querySelector(".qty")?.value) || 0;
+      const price = parseFloat(row.querySelector(".price")?.value) || 0;
+      const vat = qty * price * 0.15;
+      const disc = parseFloat(row.querySelector(".disc")?.value) || 0;
+      const lineTotal = (qty * price + vat) - disc;
+      total += lineTotal;
+
+      html += `<tr><td>${desc}</td>`;
+      if (document.querySelector('.col-toggle[data-col="unit"]').checked) html += `<td>${qty}</td>`;
+      if (document.querySelector('.col-toggle[data-col="price"]').checked) html += `<td>${price}</td>`;
+      if (document.querySelector('.col-toggle[data-col="vat"]').checked) html += `<td>${vat.toFixed(2)}</td>`;
+      if (document.querySelector('.col-toggle[data-col="discount"]').checked) html += `<td>${disc}</td>`;
+      html += `<td>${lineTotal.toFixed(2)}</td></tr>`;
+    });
+
+    document.getElementById("previewTable").innerHTML = html;
+    document.getElementById("grandTotal").innerText = total.toFixed(2);
+    
+    
+  const getSize = (id, fallback) => parseInt(document.getElementById(id)?.value || fallback);
+  document.getElementById("previewTitle").style.fontSize = getSize("docTitleFont", 22) + "pt";
+  document.getElementById("previewCompany").style.fontSize = getSize("customerFont", 12) + "pt";
+  document.getElementById("previewIntro").style.fontSize = getSize("introFont", 16) + "pt";
+  document.getElementById("previewTerms").style.fontSize = getSize("termsFont", 16) + "pt";
+
+  document.getElementById("previewTerms").innerText = get("termsText");
+  };
+
+  document.getElementById("logoInput").addEventListener("change", e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+    const logo = document.getElementById("logoPreview");
+    logo.src = reader.result;
+    logo.style.transform = "scale(2.2)";
+    logo.style.transformOrigin = "center";
+
+  // Apply Margins والPreview تلقائيًا عند التحميل
+  applyNewMargins();
+  generatePreview();
+
+  };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("bgInput").addEventListener("change", e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 794;
+        canvas.height = 1123;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const lowResPreview = canvas.toDataURL();
+        document.getElementById("letterhead").style.backgroundImage = `url(${lowResPreview})`;
+        document.getElementById("letterhead").style.width = canvas.width + "px";
+        document.getElementById("letterhead").style.height = canvas.height + "px";
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("stampInput").addEventListener("change", e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = () => {
+      const stamp = document.getElementById("stampPreview");
+      stamp.src = reader.result;
+      stamp.style.transform = "scale(2)";
+      stamp.style.transformOrigin = "center";
+    };
+    
+    reader.readAsDataURL(file);
+  });
+
+  window.downloadAsPDF = async () => {
+    const { jsPDF } = window.jspdf;
+    const letter = document.getElementById("letterhead");
+    const canvas = await html2canvas(letter, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "pt", "a4");
+    pdf.addImage(imgData, "PNG", 0, 0, 595.28, 841.89);
+    pdf.save("quotation.pdf");
+  };
+});
+</script>
+
+
+<script>
+
+window.applyNewMargins = function() {
+  const tb = parseFloat(document.getElementById('tbMargin').value) || 0;
+  const lr = parseFloat(document.getElementById('lrMargin').value) || 0;
+
+  // حساب نسبة التصغير بناءً على الهامش الجانبي
+  const pageWidth = 744; // العرض الكامل
+  const safeWidth = pageWidth - (2 * lr);
+  const scale = Math.max(0.3, safeWidth / pageWidth); // حد أدنى للتصغير
+
+  const content = document.getElementById('contentInner');
+  content.style.transform = `scale(${scale})`;
+  content.style.marginTop = `${tb}px`;
+  content.style.marginBottom = `${tb}px`;
+  content.style.transformOrigin = 'top center';
+};
+
+
+window.updateTotals = function() {
+  let total = 0;
+  document.querySelectorAll("#itemBody tr").forEach(row => {
+    const qty = parseFloat(row.querySelector(".qty")?.value) || 0;
+    const price = parseFloat(row.querySelector(".price")?.value) || 0;
+    const discount = parseFloat(row.querySelector(".disc")?.value) || 0;
+    const vatAmount = qty * price * 0.15;
+    row.querySelector(".vat").value = vatAmount.toFixed(2);
+    const lineTotal = (qty * price + vatAmount) - discount;
+    row.querySelector(".total").innerText = lineTotal.toFixed(2);
+    total += lineTotal;
+  });
+  document.getElementById("grandTotal").innerText = total.toFixed(2);
+};
+
+window.addRow = function() {
+  const row = document.createElement("tr");
+  row.innerHTML = '<td><input class="desc" /></td>' +
+                  '<td class="col-unit"><input type="number" class="qty" /></td>' +
+                  '<td class="col-price"><input type="number" class="price" /></td>' +
+                  '<td class="col-vat"><input type="number" class="vat" /></td>' +
+                  '<td class="col-discount"><input type="number" class="disc" /></td>' +
+                  '<td class="total">0</td>';
+  document.getElementById("itemBody").appendChild(row);
+};
+
+window.removeRow = function() {
+  const table = document.getElementById("itemBody");
+  if (table.rows.length > 1) table.deleteRow(-1);
+};
+
+window.generatePreview = function() {
+  const get = id => document.getElementById(id)?.value || '';
+  document.getElementById("previewTitle").innerText = get("docTitle");
+  document.getElementById("previewCompany").innerText = get("customerDetails");
+  document.getElementById("previewContact").innerText = get("contactInfo");
+  document.getElementById("previewClient").innerText = get("clientName");
+  document.getElementById("previewProject").innerText = get("projectName");
+  document.getElementById("previewNumber").innerText = get("quotationNumber");
+  document.getElementById("previewDate").innerText = get("date");
+  document.getElementById("previewLocation").innerText = get("location");
+  document.getElementById("previewIntro").innerText = get("introText");
+
+  let total = 0;
+  const rows = document.querySelectorAll("#itemBody tr");
+  let html = "<tr><th>Description</th>";
+  if (document.querySelector('.col-toggle[data-col="unit"]').checked) html += "<th>Quantity</th>";
+  if (document.querySelector('.col-toggle[data-col="price"]').checked) html += "<th>Unit Price</th>";
+  if (document.querySelector('.col-toggle[data-col="vat"]').checked) html += "<th>VAT</th>";
+  if (document.querySelector('.col-toggle[data-col="discount"]').checked) html += "<th>Discount</th>";
+  html += "<th>Total</th></tr>";
+
+  rows.forEach(row => {
+    const desc = row.querySelector(".desc").value;
+    const qty = parseFloat(row.querySelector(".qty")?.value) || 0;
+    const price = parseFloat(row.querySelector(".price")?.value) || 0;
+    const vat = qty * price * 0.15;
+    const disc = parseFloat(row.querySelector(".disc")?.value) || 0;
+    const lineTotal = (qty * price + vat) - disc;
+    total += lineTotal;
+
+    html += `<tr><td>${desc}</td>`;
+    if (document.querySelector('.col-toggle[data-col="unit"]').checked) html += `<td>${qty}</td>`;
+    if (document.querySelector('.col-toggle[data-col="price"]').checked) html += `<td>${price}</td>`;
+    if (document.querySelector('.col-toggle[data-col="vat"]').checked) html += `<td>${vat.toFixed(2)}</td>`;
+    if (document.querySelector('.col-toggle[data-col="discount"]').checked) html += `<td>${disc}</td>`;
+    html += `<td>${lineTotal.toFixed(2)}</td></tr>`;
+  });
+
+  document.getElementById("previewTable").innerHTML = html;
+  document.getElementById("grandTotal").innerText = total.toFixed(2);
+  
+  
+  const getSize = (id, fallback) => parseInt(document.getElementById(id)?.value || fallback);
+  document.getElementById("previewTitle").style.fontSize = getSize("docTitleFont", 22) + "pt";
+  document.getElementById("previewCompany").style.fontSize = getSize("customerFont", 12) + "pt";
+  document.getElementById("previewIntro").style.fontSize = getSize("introFont", 16) + "pt";
+  document.getElementById("previewTerms").style.fontSize = getSize("termsFont", 16) + "pt";
+
+  document.getElementById("previewTerms").innerText = get("termsText");
+};
+
+document.getElementById("itemBody").addEventListener("input", window.updateTotals);
+
+document.getElementById("logoInput").addEventListener("change", e => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    const logo = document.getElementById("logoPreview");
+    logo.src = reader.result;
+    logo.style.transform = "scale(2.2)";
+    logo.style.transformOrigin = "center";
+
+  // Apply Margins والPreview تلقائيًا عند التحميل
+  applyNewMargins();
+  generatePreview();
+
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("bgInput").addEventListener("change", e => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 794;
+      canvas.height = 1123;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const lowResPreview = canvas.toDataURL();
+      document.getElementById("letterhead").style.backgroundImage = `url(${lowResPreview})`;
+      document.getElementById("letterhead").style.width = canvas.width + "px";
+      document.getElementById("letterhead").style.height = canvas.height + "px";
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("stampInput").addEventListener("change", e => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  
+    reader.onload = () => {
+      const stamp = document.getElementById("stampPreview");
+      stamp.src = reader.result;
+      stamp.style.transform = "scale(2)";
+      stamp.style.transformOrigin = "center";
+    };
+    
+  reader.readAsDataURL(file);
+});
+
+window.downloadAsPDF = async function() {
+  const { jsPDF } = window.jspdf;
+  const letter = document.getElementById("letterhead");
+  const canvas = await html2canvas(letter, { scale: 2 });
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF("p", "pt", "a4");
+  pdf.addImage(imgData, "PNG", 0, 0, 595.28, 841.89);
+  pdf.save("quotation.pdf");
+};
+</script>
+
+
+<script>
+let stampRight = 60;
+let stampBottom = 60;
+function moveStamp(deltaRight, deltaBottom) {
+  stampRight += deltaRight;
+  stampBottom += deltaBottom;
+  const stamp = document.getElementById("stampPreview");
+  if (stamp) {
+    stamp.style.right = stampRight + "px";
+    stamp.style.bottom = stampBottom + "px";
+  }
+  const rightDisplay = document.getElementById("rightValue");
+  const bottomDisplay = document.getElementById("bottomValue");
+  if (rightDisplay) rightDisplay.innerText = stampRight;
+  if (bottomDisplay) bottomDisplay.innerText = stampBottom;
+}
+</script>
+
+
+<!-- Full file omitted for brevity; only relevant injected JS provided -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // روابط الصور الافتراضية
+  const defaultBG = "https://site-rde74bcv.wsecdn2.websitecdn.com/uploads/fb96de588fa645fc88b67d030ee48f45.jpg";
+  const defaultStamp = "https://site-rde74bcv.wsecdn2.websitecdn.com/uploads/091d306ae6834f6cbb6b0e3e43a54098.png";
+  const defaultSignature = "https://site-rde74bcv.wsecdn2.websitecdn.com/uploads/389cb540886d4edd80a8e10e3e8cbe47.png";
+
+  // Upload Background الافتراضية
+  const bgImg = new Image();
+  bgImg.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 794;
+    canvas.height = 1123;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    const lowResPreview = canvas.toDataURL();
+    document.getElementById("letterhead").style.backgroundImage = `url(${lowResPreview})`;
+    document.getElementById("letterhead").style.width = canvas.width + "px";
+    document.getElementById("letterhead").style.height = canvas.height + "px";
+  };
+  bgImg.crossOrigin = "anonymous";
+  bgImg.src = defaultBG;
+
+  // Upload Stamp الافتراضي
+  const stamp = document.getElementById("stampPreview");
+  stamp.src = defaultStamp;
+  stamp.style.transform = "scale(2)";
+  stamp.style.transformOrigin = "center";
+
+  // تحميل الHand Signatureوي الافتراضي
+  const logo = document.getElementById("logoPreview");
+  logo.src = defaultSignature;
+  logo.style.maxHeight = "80px";
+  logo.style.transform = "scale(2.2)";
+  logo.style.transformOrigin = "center";
+
+  // Apply Margins والPreview تلقائيًا عند التحميل
+  applyNewMargins();
+  generatePreview();
+
+});
+</script>
+
+
+<script>
+let sigRight = 120;
+let sigBottom = 300;
+function moveSignature(deltaRight, deltaBottom) {
+  sigRight += deltaRight;
+  sigBottom += deltaBottom;
+  const sig = document.getElementById("logoPreview");
+  if (sig) {
+    sig.style.position = "absolute";
+    sig.style.right = sigRight + "px";
+    sig.style.bottom = sigBottom + "px";
+  }
+  const rightDisplay = document.getElementById("sigRightValue");
+  const bottomDisplay = document.getElementById("sigBottomValue");
+  if (rightDisplay) rightDisplay.innerText = sigRight;
+  if (bottomDisplay) bottomDisplay.innerText = sigBottom;
+  if (bottomDisplay) bottomDisplay.innerText = sigBottom;
+}
+</script>
+
+
+<script>
+window.downloadAsImage = async function () {
+  const previewBox = document.getElementById("letterhead");
+  const canvas = await html2canvas(previewBox, { scale: 2, useCORS: true });
+  const imgData = canvas.toDataURL("image/png");
+
+  const link = document.createElement("a");
+  link.href = imgData;
+  link.download = "quotation.png";
+  link.click();
+};
+</script>
+
+
+<script>
+function waitForImagesToLoad(container) {
+  const images = container.querySelectorAll("img");
+  const promises = Array.from(images).map(img => {
+    return new Promise(resolve => {
+      if (img.complete) resolve();
+      else img.onload = resolve;
+    });
+  });
+  return Promise.all(promises);
+}
+</script>
+
+
+<script>
+window.downloadAsPDF = async function () {
+  const previewBox = document.getElementById("letterhead");
+
+  await waitForImagesToLoad(previewBox);
+
+  const canvas = await html2canvas(previewBox, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: null
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jspdf.jsPDF("p", "pt", "a4");
+  pdf.addImage(imgData, "PNG", 0, 0, 595.28, 841.89);
+  pdf.save("quotation.pdf");
+};
+</script>
+
+</body>
+</html>
